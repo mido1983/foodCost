@@ -94,6 +94,22 @@ require_once __DIR__ . '/../admin/admin_check.php';
         </li>
 
         <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Calculator
+        </div>
+
+        <!-- Nav Item - Calculator -->
+        <li class="nav-item">
+            <a class="nav-link <?= $current_page === 'calculator' ? 'active' : '' ?>" href="<?= SITE_URL ?>/calculator.php">
+                <i class="fas fa-calculator"></i>
+                <span>Cost Calculator</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
         <!-- Sidebar Toggler (Sidebar) -->

@@ -28,6 +28,11 @@
                         <li class="nav-item">
                             <a class="nav-link <?= $current_page === 'home' ? 'active' : '' ?>" href="<?= SITE_URL ?>">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= $current_page === 'calculator' ? 'active' : '' ?>" href="<?= SITE_URL ?>/calculator.php">
+                                <i class="fas fa-calculator"></i> Cost Calculator
+                            </a>
+                        </li>
                         <!-- Add more menu items here -->
                     </ul>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

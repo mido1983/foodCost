@@ -34,29 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Upload featured image if provided
     $featured_image = null;
-    if (isset($_FILES['featured_image']) && $_FILES['featured_image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../uploads/blog/';
-        
-        // Create directory if it doesn't exist
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-        
-        $temp_name = $_FILES['featured_image']['tmp_name'];
-        $image_name = time() . '_' . $_FILES['featured_image']['name'];
-        $upload_path = $upload_dir . $image_name;
-        
-        // Check if file is an image
-        $image_info = getimagesize($temp_name);
-        if ($image_info === false) {
-            $errors[] = 'Uploaded file is not a valid image';
-        } else {
-            // Move the uploaded file
-            if (move_uploaded_file($temp_name, $upload_path)) {
-                $featured_image = $image_name;
-            } else {
-                $errors[] = 'Failed to upload image';
-            }
+    if (isset($_FILES['featured_image']) && !empty($_FILES['featured_image']['name'])) {
+        try {
+            $uploader = new FileUploader('blog'); // Указываем подпапку 'blog'
+            $fileName = $uploader->setFile($_FILES['featured_image'])->upload();
+            
+            // Сохраняем только имя файла, без полного пути
+            $featured_image = $fileName;
+        } catch (Exception $e) {
+            Session::setFlash('error', 'Image upload error: ' . $e->getMessage());
+            // Обработка ошибки
         }
     }
     

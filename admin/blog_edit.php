@@ -55,41 +55,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Upload featured image if provided
     $featured_image = $post['featured_image'];
-    if (isset($_FILES['featured_image']) && $_FILES['featured_image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../uploads/blog/';
-        
-        // Create directory if it doesn't exist
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-        
-        $temp_name = $_FILES['featured_image']['tmp_name'];
-        $image_name = time() . '_' . $_FILES['featured_image']['name'];
-        $upload_path = $upload_dir . $image_name;
-        
-        // Check if file is an image
-        $image_info = getimagesize($temp_name);
-        if ($image_info === false) {
-            $errors[] = 'Uploaded file is not a valid image';
-        } else {
-            // Move the uploaded file
-            if (move_uploaded_file($temp_name, $upload_path)) {
-                // Delete old image if exists
-                if ($featured_image && file_exists($upload_dir . $featured_image)) {
-                    unlink($upload_dir . $featured_image);
-                }
-                $featured_image = $image_name;
-            } else {
-                $errors[] = 'Failed to upload image';
+    if (isset($_FILES['featured_image']) && !empty($_FILES['featured_image']['name'])) {
+        try {
+            $uploader = new FileUploader('blog');
+            $fileName = $uploader->setFile($_FILES['featured_image'])->upload();
+            
+            // Delete old image if exists
+            if ($featured_image && file_exists('../uploads/blog/' . $featured_image)) {
+                unlink('../uploads/blog/' . $featured_image);
             }
+            $featured_image = $fileName;
+        } catch (Exception $e) {
+            $errors[] = 'Image upload error: ' . $e->getMessage();
         }
     }
     
     // Remove featured image if requested
     if (isset($_POST['remove_image']) && $_POST['remove_image'] === '1') {
-        $upload_dir = '../uploads/blog/';
-        if ($featured_image && file_exists($upload_dir . $featured_image)) {
-            unlink($upload_dir . $featured_image);
+        if ($featured_image && file_exists('../uploads/blog/' . $featured_image)) {
+            unlink('../uploads/blog/' . $featured_image);
         }
         $featured_image = null;
     }
@@ -170,7 +154,7 @@ require_once '../includes/admin_header.php';
                 <label for="featured_image" class="form-label">Featured Image</label>
                 <?php if ($post['featured_image']): ?>
                 <div class="mb-2">
-                    <img src="<?= SITE_URL ?>/uploads/blog/<?= $post['featured_image'] ?>" alt="Featured Image" style="max-width: 200px; max-height: 200px;" class="img-thumbnail">
+                    <img src="<?= SITE_URL . '/' . $post['featured_image'] ?>" alt="Featured Image" style="max-width: 200px; max-height: 200px;" class="img-thumbnail">
                     <div class="form-check mt-2">
                         <input class="form-check-input" type="checkbox" id="remove_image" name="remove_image" value="1">
                         <label class="form-check-label" for="remove_image">Remove current image</label>

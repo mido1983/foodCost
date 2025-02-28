@@ -111,7 +111,7 @@ require_once __DIR__ . '/../admin/admin_check.php';
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                    <a href="/foodCost">To site</a>
                 <!-- Sidebar Toggle (Topbar) -->
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3">
                     <i class="fa fa-bars"></i>
@@ -162,7 +162,7 @@ require_once __DIR__ . '/../admin/admin_check.php';
                 <?php endif; ?>
 
                 <!-- Content -->
-                    
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

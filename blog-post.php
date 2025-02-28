@@ -39,6 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && Session::isLoggedIn()) {
 $current_page = 'blog';
 $page_title = $post['title'];
 require_once 'includes/header.php';
+
+// Проверяем, содержит ли путь к изображению уже полный URL
+$imageUrl = $post['featured_image'];
+if (!preg_match('/^https?:\/\//', $imageUrl)) {
+    // Если нет, добавляем путь к директории загрузок
+    $imageUrl = UPLOADS_URL . '/blog/' . $imageUrl;
+}
 ?>
 
 <div class="container py-5">
@@ -73,7 +80,7 @@ require_once 'includes/header.php';
                 
                 <?php if (!empty($post['featured_image'])): ?>
                     <div class="mb-4">
-                        <img src="<?= SITE_URL ?>/<?= $post['featured_image'] ?>" class="img-fluid rounded" alt="<?= htmlspecialchars($post['title']) ?>">
+                        <img src="<?= $imageUrl ?>" class="img-fluid rounded" alt="<?= htmlspecialchars($post['title']) ?>">
                     </div>
                 <?php endif; ?>
                 

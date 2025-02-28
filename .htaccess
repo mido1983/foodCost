@@ -1,0 +1,36 @@
+# Добавьте в ваш .htaccess для поддержки кириллических символов в URL
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Базовый путь - измените, если ваш сайт находится в подпапке
+    RewriteBase /foodCost/
+    
+    # Правило для удаления расширения .php из URL
+    # Не применять к существующим файлам и директориям
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+)$ $1.php [L,QSA]
+    
+    # Правило для перенаправления с .php на URL без .php
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
+    RewriteRule ^([^.]+)\.php$ $1 [R=301,L]
+    
+    # Преобразование кириллических символов в URL
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^uploads/(.*)$ uploads/$1 [L,QSA]
+    
+    # Обработка страниц ошибок
+    ErrorDocument 400 /foodCost/errors/400.php
+    ErrorDocument 401 /foodCost/errors/401.php
+    ErrorDocument 403 /foodCost/errors/403.php
+    ErrorDocument 404 /foodCost/errors/404.php
+    ErrorDocument 500 /foodCost/errors/500.php
+    ErrorDocument 503 /foodCost/errors/503.php
+</IfModule>
+
+# Поддержка WebP
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+</IfModule> 

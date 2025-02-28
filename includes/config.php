@@ -44,6 +44,10 @@ if (!defined('SITE_NAME')) define('SITE_NAME', getenv('SITE_NAME') ?: 'FoodCost 
 if (!defined('SITE_URL')) define('SITE_URL', getenv('SITE_URL') ?: 'http://localhost/foodcost');
 if (!defined('SITE_EMAIL')) define('SITE_EMAIL', getenv('SITE_EMAIL') ?: 'admin@foodcostmanager.com');
 
+// Добавьте константы для путей к медиа-файлам
+if (!defined('UPLOADS_PATH')) define('UPLOADS_PATH', __DIR__ . '/../uploads');
+if (!defined('UPLOADS_URL')) define('UPLOADS_URL', SITE_URL . '/uploads');
+
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();

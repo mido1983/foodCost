@@ -44,4 +44,14 @@ class Session {
         }
         return null;
     }
+
+    /**
+     * Проверяет, существует ли флеш-сообщение
+     * 
+     * @return bool Существует ли флеш-сообщение
+     */
+    public static function hasFlash() {
+        self::start();
+        return isset($_SESSION['flash']) && !empty($_SESSION['flash']);
+    }
 } 

@@ -1,22 +1,17 @@
 <?php
 class Database {
-    private $host = DB_HOST;
-    private $username = DB_USER;
-    private $password = DB_PASS;
-    private $db_name = DB_NAME;
-    private $pdo;
     private static $instance = null;
+    private $pdo;
 
     private function __construct() {
-        $dsn = "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4";
-        $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
-        ];
-
         try {
-            $this->pdo = new PDO($dsn, $this->username, $this->password, $options);
+            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ];
+            $this->pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (PDOException $e) {
             throw new Exception("Database connection failed: " . $e->getMessage());
         }

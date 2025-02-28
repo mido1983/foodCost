@@ -1,0 +1,32 @@
+# Prevent directory listing
+Options -Indexes
+
+# Deny access to .htaccess file
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Enable PHP access
+<FilesMatch "\.php$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>
+
+# Redirect direct access to admin_check.php to admin index
+<Files admin_check.php>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Prevent viewing of hidden files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Allow access to common file types
+<FilesMatch ".*\.(js|css|jpg|jpeg|png|gif|svg)$">
+    Order allow,deny
+    Allow from all
+</FilesMatch> 

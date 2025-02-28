@@ -45,6 +45,24 @@
                                     <li><a class="dropdown-item" href="<?= SITE_URL ?>/logout.php">Logout</a></li>
                                 </ul>
                             </li>
+                            <?php 
+                            $user = new User();
+                            $userRole = $user->getRole();
+                            if ($userRole === 'admin'): 
+                            ?>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" 
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-cogs"></i> Администрирование
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <li><a class="dropdown-item" href="<?= SITE_URL ?>/admin/index.php">Панель управления</a></li>
+                                    <li><a class="dropdown-item" href="<?= SITE_URL ?>/admin/users.php">Управление пользователями</a></li>
+                                    <li><a class="dropdown-item" href="<?= SITE_URL ?>/admin/blog.php">Управление блогом</a></li>
+                                    <li><a class="dropdown-item" href="<?= SITE_URL ?>/admin/export_stats.php">Статистика и экспорт</a></li>
+                                </ul>
+                            </li>
+                            <?php endif; ?>
                         <?php else: ?>
                             <li class="nav-item">
                                 <a class="nav-link <?= $current_page === 'login' ? 'active' : '' ?>" href="<?= SITE_URL ?>/login.php">Login</a>

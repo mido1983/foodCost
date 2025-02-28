@@ -2,7 +2,7 @@
 // Load environment variables from config.env file
 function loadEnv($path) {
     if (!file_exists($path)) {
-        die("Configuration file {$path} not found");
+        return false;
     }
 
     $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -23,11 +23,12 @@ function loadEnv($path) {
                 $value = substr($value, 1, -1);
             }
 
-            // Set as environment variable and as constant
+            // Set as environment variable
             putenv("{$key}={$value}");
-            if (!defined($key)) define($key, $value);
         }
     }
+    
+    return true;
 }
 
 // Load environment variables
@@ -35,12 +36,13 @@ $env_path = __DIR__ . '/../config.env';
 loadEnv($env_path);
 
 // Configuration settings (now using environment variables)
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('DB_NAME') ?: 'foodCost_db');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
-define('SITE_NAME', getenv('SITE_NAME') ?: 'FoodCost Manager');
-define('SITE_URL', getenv('SITE_URL') ?: 'http://localhost/foodCost');
+if (!defined('DB_HOST')) define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+if (!defined('DB_NAME')) define('DB_NAME', getenv('DB_NAME') ?: 'foodCost_db');
+if (!defined('DB_USER')) define('DB_USER', getenv('DB_USER') ?: 'root');
+if (!defined('DB_PASS')) define('DB_PASS', getenv('DB_PASS') ?: '');
+if (!defined('SITE_NAME')) define('SITE_NAME', getenv('SITE_NAME') ?: 'FoodCost Manager');
+if (!defined('SITE_URL')) define('SITE_URL', getenv('SITE_URL') ?: 'http://localhost/foodcost');
+if (!defined('SITE_EMAIL')) define('SITE_EMAIL', getenv('SITE_EMAIL') ?: 'admin@foodcostmanager.com');
 
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
@@ -57,12 +59,12 @@ if (getenv('ENVIRONMENT') === 'production') {
 }
 
 // Time zone
-date_default_timezone_set('UTC');
+date_default_timezone_set('Europe/Kiev');
 
 // Autoload classes
-spl_autoload_register(function($class) {
-    $class_file = __DIR__ . '/../classes/' . $class . '.php';
-    if (file_exists($class_file)) {
-        require_once $class_file;
+spl_autoload_register(function($className) {
+    $file = __DIR__ . '/../classes/' . $className . '.php';
+    if (file_exists($file)) {
+        require_once $file;
     }
 }); 

@@ -1,0 +1,47 @@
+# Environment Configuration
+config.env
+.env
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor Files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Dependency Directories
+vendor/
+node_modules/
+
+# Cache & Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tmp
+*.temp
+cache/
+
+# Compiled Files
+*.min.css
+*.min.js
+
+# User Uploaded Content
+uploads/
+public/uploads/
+
+# Build Files
+dist/
+build/
+
+# Configuration Files with Sensitive Data
+*config.json
+*credentials.json
+
+# Database Backups
+*.sql
+*.bak 

@@ -216,4 +216,67 @@ class Blog {
         
         return $slug;
     }
+
+    /**
+     * Получение комментариев к посту
+     * 
+     * @param int $postId ID поста блога
+     * @param int $limit Лимит комментариев (опционально)
+     * @param int $offset Смещение для пагинации (опционально) 
+     * @param string $status Статус комментариев для отображения (по умолчанию 'approved')
+     * @return array Массив комментариев
+     */
+    public function getComments($postId, $limit = 50, $offset = 0, $status = 'approved') {
+        $sql = "SELECT bc.*, u.username, u.email 
+                FROM blog_comments bc 
+                LEFT JOIN users u ON bc.user_id = u.id 
+                WHERE bc.post_id = ? 
+                AND bc.status = ?
+                ORDER BY bc.created_at DESC 
+                LIMIT ? OFFSET ?";
+        
+        return $this->db->select($sql, [$postId, $status, $limit, $offset]);
+    }
+
+    /**
+     * Получение количества комментариев к посту
+     *
+     * @param int $postId ID поста блога
+     * @param string|null $status Статус комментариев для подсчета (null - все)
+     * @return int Количество комментариев
+     */
+    public function getCommentsCount($postId, $status = 'approved') {
+        $sql = "SELECT COUNT(*) as total FROM blog_comments WHERE post_id = ?";
+        
+        $params = [$postId];
+        
+        if ($status !== null) {
+            $sql .= " AND status = ?";
+            $params[] = $status;
+        }
+        
+        $result = $this->db->selectOne($sql, $params);
+        return $result ? $result['total'] : 0;
+    }
+
+    /**
+     * Добавление комментария к посту
+     *
+     * @param int $postId ID поста
+     * @param int $userId ID пользователя (null для анонимных)
+     * @param string $content Текст комментария
+     * @param int $parentId ID родительского комментария (для вложенных)
+     * @return bool|int ID добавленного комментария или false в случае ошибки
+     */
+    public function addComment($postId, $userId, $content, $parentId = null) {
+        $data = [
+            'post_id' => $postId,
+            'user_id' => $userId,
+            'content' => $content,
+            'parent_id' => $parentId,
+            'status' => $userId ? 'approved' : 'pending' // Автоматически одобряем комментарии зарегистрированных пользователей
+        ];
+        
+        return $this->db->insert('blog_comments', $data);
+    }
 } 

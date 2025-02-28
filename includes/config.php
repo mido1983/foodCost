@@ -67,4 +67,7 @@ spl_autoload_register(function($className) {
     if (file_exists($file)) {
         require_once $file;
     }
-}); 
+});
+
+// Добавьте эту строку после всех остальных подключений файлов
+require_once __DIR__ . '/admin_functions.php'; 
